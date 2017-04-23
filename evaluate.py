@@ -92,8 +92,6 @@ if __name__ == '__main__':
       print('mean episode collision: %.2f' % np.mean(ep_collisions))
 
       scene_stats[scene_scope].extend(ep_lengths)
-      break
-    break
 
 print('\nResults (average trajectory length):')
 for scene_scope in scene_stats:
