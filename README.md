@@ -52,6 +52,7 @@ For evaluation, we run 100 episodes for each target and report the mean/stddev l
 # evaluate a checkpoint on targets defined in TASK_LIST
 python evaluate.py
 ```
+For a quick start, you can download a pretrained model checkpoint from [here](http://vision.stanford.edu/yukezhu/thor_v1_sample_checkpoint.zip). See ```README.md``` in the zip file for detailed instructions.
 
 ## Acknowledgements
 I would like to acknowledge the following references that have offered great help for me to implement the model.
