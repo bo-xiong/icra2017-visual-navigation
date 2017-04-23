@@ -19,7 +19,7 @@ This code is implemented in [Tensorflow API r1.0](https://www.tensorflow.org/api
 To facilitate training, we provide [hdf5](http://www.h5py.org/) dumps of the simulated scenes. Each dump contains the agent's first-person observations sampled from a discrete grid in four cardinal directions. To be more specific, each dump stores the following information row by row:
 
 * **observation**: 300x400x3 RGB image (agent's first-person view)
-* **resnet_feature**: 2048-d [ResNet-50](https://arxiv.org/abs/1512.03385) feature extracted from the observations
+* **resnet_feature**: 2048-d [ResNet-50](https://arxiv.org/abs/1512.03385) feature of the observations extracted using [Keras](https://keras.io/applications/#resnet50)
 * **location**: (x, y) coordinates of the sampled scene locations on a discrete grid with 0.5-meter offset
 * **rotation**: agent's rotation in one of the four cardinal directions, 0, 90, 180, and 270 degrees
 * **graph**: a state-action transition graph, where ```graph[i][j]``` is the location id of the destination by taking action ```j``` in location ```i```, and ```-1``` indicates collision while the agent stays in the same place.
