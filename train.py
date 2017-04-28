@@ -29,6 +29,9 @@ from constants import USE_GPU
 from constants import TASK_TYPE
 from constants import TASK_LIST
 
+GPU_NUM = 4
+CPU_NUM = 24
+
 if __name__ == '__main__':
 
   device = "/gpu:0" if USE_GPU else "/cpu:0"
@@ -72,10 +75,11 @@ if __name__ == '__main__':
   training_threads = []
   for i in range(PARALLEL_SIZE):
     scene, task = branches[i%NUM_TASKS]
+    device = '/gpu:%d' % (i%GPU_NUM) if USE_GPU else '/cpu:%d' % (i%CPU_NUM)
     training_thread = A3CTrainingThread(i, global_network, initial_learning_rate,
                                         learning_rate_input,
                                         grad_applier, MAX_TIME_STEP,
-                                        device = device,
+                                        device = device, 
                                         network_scope = "thread-%d"%(i+1),
                                         scene_scope = scene,
                                         task_scope = task)
