@@ -33,7 +33,7 @@ class THORDiscreteEnvironment(object):
     self.terminal_states, = np.where(self.terminals)
 
     self.transition_graph = self.h5_file['graph'][()]
-    self.shortest_path_distances = self.h5_file['shortest_path_distance'][()]
+    # self.shortest_path_distances = self.h5_file['shortest_path_distance'][()]
 
     self.history_length = HISTORY_LENGTH
     self.screen_height  = SCREEN_HEIGHT
@@ -50,17 +50,18 @@ class THORDiscreteEnvironment(object):
   # public methods
 
   def reset(self):
-    # randomize initial state
+    # randomize initial state (that is not in the terminal states)
     while True:
       k = random.randrange(self.n_locations)
-      min_d = np.inf
-      # check if target is reachable
-      for t_state in self.terminal_states:
-        dist = self.shortest_path_distances[k][t_state]
-        min_d = min(min_d, dist)
-      # min_d = 0  if k is a terminal state
-      # min_d = -1 if no terminal state is reachable from k
-      if min_d > 0: break
+      if not k in self.terminal_states: break
+      # min_d = np.inf
+      # # check if target is reachable
+      # for t_state in self.terminal_states:
+      #   dist = self.shortest_path_distances[k][t_state]
+      #   min_d = min(min_d, dist)
+      # # min_d = 0  if k is a terminal state
+      # # min_d = -1 if no terminal state is reachable from k
+      # if min_d > 0: break
 
     # reset parameters
     self.current_state_id = k
