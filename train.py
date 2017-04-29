@@ -83,6 +83,10 @@ if __name__ == '__main__':
   training_threads = []
   for i in range(PARALLEL_SIZE):
     scene, task = branches[i%NUM_TASKS]
+    # if i <= CPU_NUM:
+    #   device = '/cpu:%d' % i
+    # else:
+    #   device = '/gpu:%d' % (i%GPU_NUM)
     device = '/gpu:%d' % (i%GPU_NUM) if USE_GPU else '/cpu:%d' % (i%CPU_NUM)
     training_thread = A3CTrainingThread(i, global_network, initial_learning_rate,
                                         learning_rate_input,
