@@ -36,7 +36,7 @@ TASK_TYPE = 'navigation' # no need to change
 #   'living_room_08' : ['92', '135', '193', '228', '254']
 # }
 
-with open('data/avd_train_tasks.json') as f: 
+with open('data/avd_train_mini_tasks.json') as f: 
   TRAIN_TASK_LIST = json.load(f)
-with open('data/avd_test_tasks.json') as f: 
+with open('data/avd_test_mini_tasks.json') as f: 
   TEST_TASK_LIST = json.load(f)

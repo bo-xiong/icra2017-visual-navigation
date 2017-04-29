@@ -40,6 +40,10 @@ def find_target_views(subset, scene_list):
   with open(json_path, 'w') as f:
     pass
 
+  mini_json_path = 'data/avd_%s_mini_tasks.json' % subset
+  with open(mini_json_path, 'w') as f:
+    pass
+  
   task_list = {}  
   mini_task_list = {}       
 
@@ -70,9 +74,9 @@ def find_target_views(subset, scene_list):
           instance_max_image[instance_id] = image_name
           instance_min_diff[instance_id] = diff_level
 
-    descend_idx = np.argsort(-instance_max_area, order)
+    descend_idx = np.argsort(-instance_max_area)
     instance_max_area = instance_max_area[descend_idx]
-    instance_max_image = instance_max_image[descend_idx]
+    instance_max_image = [instance_max_image[i] for i in descend_idx]
     instance_min_diff = instance_min_diff[descend_idx]
 
     valid_image_names = []
@@ -88,9 +92,16 @@ def find_target_views(subset, scene_list):
     for image_name in valid_image_names:
       task_list[task_name].append(str(image_files.index(image_name)))
 
+    mini_task_list[task_name] = []
+    for (i, image_name) in enumerate(valid_image_names):
+      if i >= 5: break
+      mini_task_list[task_name].append(str(image_files.index(image_name)))
+
   with open(json_path, 'w') as f:
     json.dump(task_list, f)
     
+  with open(mini_json_path, 'w') as f:
+    json.dump(mini_task_list, f)
 
 if __name__ == '__main__':
   find_target_views('train', default_train_list)
