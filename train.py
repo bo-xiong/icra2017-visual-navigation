@@ -27,10 +27,11 @@ from constants import RMSP_ALPHA
 from constants import GRAD_NORM_CLIP
 from constants import USE_GPU
 from constants import TASK_TYPE
-from constants import TASK_LIST
+from constants import TRAIN_TASK_LIST
 
 GPU_NUM = 4
 CPU_NUM = 24
+print TRAIN_TASK_LIST
 
 if __name__ == '__main__':
 
