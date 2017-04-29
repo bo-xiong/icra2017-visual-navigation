@@ -12,8 +12,6 @@ import numpy as np
 import tensorflow as tf
 from matplotlib import pyplot as plt 
 
-import active_vision_dataset
-
 import ipdb 
 
 # train_set = active_vision_dataset.AVD(root='avd/rohit_data')
