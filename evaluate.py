@@ -19,6 +19,11 @@ from constants import VERBOSE
 from constants import TASK_TYPE
 from constants import TASK_LIST
 
+import time
+
+from matplotlib import pyplot as plt
+plt.ion()
+
 if __name__ == '__main__':
 
   device = "/cpu:0" # use CPU for display tool
@@ -75,6 +80,11 @@ if __name__ == '__main__':
           env.step(action)
           env.update()
 
+          # NOTE: visualize how agents navigate around 
+          plt.imshow(env.observation)
+          plt.draw()
+          _ = raw_input("pausing")
+
           terminal = env.terminal
           if ep_t == 10000: break
           if env.collided: ep_collision += 1
@@ -85,6 +95,8 @@ if __name__ == '__main__':
         ep_rewards.append(ep_reward)
         ep_collisions.append(ep_collision)
         if VERBOSE: print("episode #{} ends after {} steps".format(i_episode, ep_t))
+
+        time.sleep(2)
 
       print('evaluation: %s %s' % (scene_scope, task_scope))
       print('mean episode reward: %.2f' % np.mean(ep_rewards))
