@@ -40,7 +40,8 @@ def find_target_views(subset, scene_list):
   with open(json_path, 'w') as f:
     pass
 
-  task_list = {}         
+  task_list = {}  
+  mini_task_list = {}       
 
   for scene in scene_list:
     scene_dir = os.path.join(root_dir, scene)
@@ -68,6 +69,11 @@ def find_target_views(subset, scene_list):
           instance_max_area[instance_id] = area 
           instance_max_image[instance_id] = image_name
           instance_min_diff[instance_id] = diff_level
+
+    descend_idx = np.argsort(-instance_max_area, order)
+    instance_max_area = instance_max_area[descend_idx]
+    instance_max_image = instance_max_image[descend_idx]
+    instance_min_diff = instance_min_diff[descend_idx]
 
     valid_image_names = []
     for i in range(instance_num):
