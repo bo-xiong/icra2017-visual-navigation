@@ -83,9 +83,10 @@ def find_target_views(subset, scene_list):
 
     # NOTE: this is an ad-hoc solution (ideally we should store a name to id map in .h5)
     image_files = os.listdir(os.path.join(root_dir, scene, image_dir))
-    task_list[scene] = []
+    task_name = 'avd_%s_%s'%(subset,scene)
+    task_list[task_name] = []
     for image_name in valid_image_names:
-      task_list[scene].append(image_files.index(image_name))
+      task_list[task_name].append(str(image_files.index(image_name)))
 
   with open(json_path, 'w') as f:
     json.dump(task_list, f)

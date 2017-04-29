@@ -15,7 +15,7 @@ from utils.ops import log_uniform
 from utils.rmsprop_applier import RMSPropApplier
 
 from constants import ACTION_SIZE
-from constants import PARALLEL_SIZE
+# from constants import PARALLEL_SIZE
 from constants import INITIAL_ALPHA_LOW
 from constants import INITIAL_ALPHA_HIGH
 from constants import INITIAL_ALPHA_LOG_RATE
@@ -31,13 +31,20 @@ from constants import TRAIN_TASK_LIST
 
 GPU_NUM = 4
 CPU_NUM = 24
-print TRAIN_TASK_LIST
+
+import pprint 
+pprint.pprint(TRAIN_TASK_LIST)
+
+PARALLEL_SIZE = sum([len(v) for k,v in TRAIN_TASK_LIST.iteritems()])
+
+# import ipdb
+# ipdb.set_trace()
 
 if __name__ == '__main__':
 
   device = "/gpu:0" if USE_GPU else "/cpu:0"
   network_scope = TASK_TYPE
-  list_of_tasks = TASK_LIST
+  list_of_tasks = TRAIN_TASK_LIST
   scene_scopes = list_of_tasks.keys()
   global_t = 0
   stop_requested = False
@@ -61,7 +68,7 @@ if __name__ == '__main__':
 
   NUM_TASKS = len(branches)
   assert PARALLEL_SIZE >= NUM_TASKS, \
-    "Not enough threads for multitasking: at least {} threads needed.".format(NUM_TASKS)
+    "Not enough threads for multitasking: at least {} threads needed. ({} parallel now)".format(NUM_TASKS, PARALLEL_SIZE)
 
   learning_rate_input = tf.placeholder("float")
   grad_applier = RMSPropApplier(learning_rate = learning_rate_input,
