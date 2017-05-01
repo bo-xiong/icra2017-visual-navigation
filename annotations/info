@@ -1,0 +1,44 @@
+1. A dictionary having the transition graph
+2. define in and out door for every scene
+3. outdoor of a scene is added to its targets
+
+
+-add a new object id for the transition image
+
+exit-10000
+entry-20000
+
+home001-1:
+
+exit - "000110006540101.jpg"
+enter - "000110006360101.jpg"
+
+home001-2:
+
+exit - "000120007140101.jpg"
+enter - "000120007200101.jpg"
+
+home002-1:
+
+exit - "000210000060101.jpg"
+enter - "000210000010101.jpg"
+
+home003-1:
+
+exit - "000310005160101.jpg"
+enter - "000310004480101.jpg"
+
+home003-2:
+
+exit - "000320004540101.jpg"
+enter - "000320004610101.jpg"
+
+home004-1:
+
+exit - "000410000050101.jpg"
+enter - "000410000120101.jpg"
+
+home004-2:
+
+exit - "000420000050101.jpg"
+enter - "000420000120101.jpg"
