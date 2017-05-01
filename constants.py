@@ -35,6 +35,8 @@ TASK_TYPE = 'navigation' # no need to change
 #   'kitchen_02'     : ['90', '136', '157', '207', '329'],
 #   'living_room_08' : ['92', '135', '193', '228', '254']
 # }
+EXIT = 10000
+ENTER = 20000
 
 with open('data/avd_train_mini_tasks.json') as f: 
   TRAIN_TASK_LIST = json.load(f)

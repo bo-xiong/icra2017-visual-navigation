@@ -5,27 +5,24 @@ import os
 import json
 import numpy as np
 
-import ipdb
+# import ipdb
 
-root_dir = 'avd/rohit_data'
+from constants import EXIT
+from constants import ENTER
+
+root_dir = '../ActiveVisionDataset/'
 image_dir = 'jpg_rgb'
 
-default_train_list = ['Home_02_1',
+default_train_list = ['Home_01_1',
+                      'Home_01_2',
+                      'Home_02_1',
                       'Home_03_1',
                       'Home_03_2',
                       'Home_04_1',
-                      'Home_04_2',
-                      'Home_05_1',
-                      'Home_05_2',
-                      'Home_06_1',
-                      'Home_14_1',
-                      'Home_14_2',
-                      'Office_01_1']
-
+                      'Home_04_2']
+                      
 default_test_list = ['Home_01_1',
-                     'Home_01_2',
-                     'Home_08_1']
-
+                     'Home_01_2']
 
 with open('data/avd_instance_id_map.txt') as f: 
   lines = f.readlines()
@@ -59,6 +56,7 @@ def find_target_views(subset, scene_list):
     instance_max_area = -np.ones(instance_num, dtype=np.float32)
     instance_min_diff = 100*np.ones(instance_num, dtype=np.int32)
     instance_max_image = ['' for _ in range(instance_num)]
+    instance_exit_image = []
 
     image_files = annotations.keys()
     for image_name in image_files:
@@ -69,10 +67,14 @@ def find_target_views(subset, scene_list):
         instance_id = bbox[4] - 1
         diff_level = bbox[5]
         area = (bbox[2] - bbox[0]) * (bbox[3]-bbox[1])
-        if area > instance_max_area[instance_id] and diff_level < instance_min_diff[instance_id]:
-          instance_max_area[instance_id] = area 
-          instance_max_image[instance_id] = image_name
-          instance_min_diff[instance_id] = diff_level
+        if not bbox[4] == EXIT and not bbox[4] == ENTER:
+          if area > instance_max_area[instance_id] and diff_level < instance_min_diff[instance_id]:
+            instance_max_area[instance_id] = area 
+            instance_max_image[instance_id] = image_name
+            instance_min_diff[instance_id] = diff_level
+
+        if bbox[4] == EXIT:
+          instance_exit_image.append(image_name)
 
     descend_idx = np.argsort(-instance_max_area)
     instance_max_area = instance_max_area[descend_idx]
@@ -92,9 +94,15 @@ def find_target_views(subset, scene_list):
     for image_name in valid_image_names:
       task_list[task_name].append(str(image_files.index(image_name)))
 
+    for image_name in instance_exit_image:
+      task_list[task_name].append(str(image_files.index(image_name)))
+
     mini_task_list[task_name] = []
     for (i, image_name) in enumerate(valid_image_names):
       if i >= 5: break
+      mini_task_list[task_name].append(str(image_files.index(image_name)))
+
+    for image_name in instance_exit_image:
       mini_task_list[task_name].append(str(image_files.index(image_name)))
 
   with open(json_path, 'w') as f:
