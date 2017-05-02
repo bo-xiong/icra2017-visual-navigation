@@ -32,6 +32,7 @@ default_test_list = ['Home_01_1',
 root_dir = 'avd/rohit_data'
 feat_dir = 'avd/deep_features/resnet50'
 image_dir = 'jpg_rgb'
+out_dir = 'data_new'
 action_list = ['rotate_ccw', 'rotate_cw', 'forward', 'backward', 'left', 'right']
 
 def image_to_scene(image_name):
@@ -70,6 +71,7 @@ def convert_avd_to_thor(subset, scene_list):
     with open(os.path.join(feat_dir, '%s.json' % scene)) as feat_file: 
       image_features = json.load(feat_file)
 
+    image_index = dict()
     graph = list()
     location = list()
     rotation = list()
@@ -77,7 +79,9 @@ def convert_avd_to_thor(subset, scene_list):
     resnet_feature = list()
 
     # enumerate image files 
-    for (i, image_name) in enumerate(image_files): 
+    for (i, image_name) in enumerate(image_files):
+      image_index[image_name] = i
+      
       print 'processing images (%d/%d) %s' % (i, len(image_files), image_name)
       # define graph
       next_image_indices = np.array([-1 for _ in action_list])
@@ -109,19 +113,23 @@ def convert_avd_to_thor(subset, scene_list):
     graph = np.array(graph,dtype=np.int32)
     location = np.array(location,dtype=np.float32)
     rotation = np.array(rotation,dtype=np.float32)
-    observation = np.array(observation,dtype=np.int8)
+    observation = np.array(observation,dtype=np.uint8)
     resnet_feature = np.array(resnet_feature,dtype=np.float32)
     # NOTE: to mimic what THOR does (n_feat_per_loc)
     resnet_feature = np.expand_dims(resnet_feature, axis=1)
 
     # initialize hdf5 format
-    f = h5py.File('data/avd_%s_%s.h5'%(subset, scene), 'w')
+    f = h5py.File(os.path.join(out_dir, 'avd_%s_%s.h5'%(subset, scene)), 'w')
     f.create_dataset('graph', data=graph)
     f.create_dataset('location', data=location)
     f.create_dataset('rotation', data=rotation)
     f.create_dataset('observation', data=observation)
     f.create_dataset('resnet_feature', data=resnet_feature)
     f.close()
+
+    # save image index dictionary into
+    with open(os.path.join(out_dir, 'avd_%s_%s_index.json'%(subset, scene)), 'w') as index_file: 
+      json.dump(image_index, index_file)
 
 if __name__ == '__main__':
   convert_avd_to_thor('train', default_train_list)
